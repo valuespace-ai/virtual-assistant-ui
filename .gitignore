@@ -1,0 +1,75 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore build output
+dist/
+build/
+
+# Ignore dependency directories
+bower_components/
+jspm_packages/
+
+# Ignore environment variable files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore Visual Studio specific files
+.vs/
+*.vsidx
+*.wsuo
+*.suo
+*.user
+*.userossc
+*.sln.docstates
+slnx.sqllite
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*.bak
+*.orig
+
+# Ignore specific files and directories
+coverage/
+*.cover
+*.coverage
+*.lcov
+
+# Ignore minified files (if you want to keep only source files in the repo)
+*.min.js
+*.min.css
+
+# Ignore specific file types (if not needed in the repo)
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore personal settings files
+*.iml
+*.ipr
+*.iws
+
+# Ignore SASS cache files
+.sass-cache/
