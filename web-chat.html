@@ -278,51 +278,65 @@
         const imageCaption = document.getElementById('imageCaption');
 
         function updateArrowVisibility() {
+            console.log("updateArrowVisibility called");
             backArrow.style.display = currentImageIndex > 0 ? 'block' : 'none';
             nextArrow.style.display = currentImageIndex < images.length - 1 ? 'block' : 'none';
         }
 
         function updateModalImage() {
+            console.log("updateModalImage called with currentImageIndex:", currentImageIndex);
             const modalImageView = document.getElementById('modalImageView');
+            modalImageView.classList.remove('fade-in'); // Remove the fade-in class if it exists
             modalImageView.style.opacity = 0; // Start with opacity 0
             setTimeout(() => {
                 modalImageView.src = images[currentImageIndex].src;
-                modalImageView.style.opacity = 1; // Transition to opacity 1
+                console.log("Image source set to:", images[currentImageIndex].src);
+                modalImageView.onload = () => {
+                    modalImageView.classList.add('fade-in'); // Add the fade-in class to trigger the transition
+                    console.log("Image opacity set to 1");
+                };
             }, 50);
             const altText = images[currentImageIndex].alt;
             if (altText) {
                 imageCaption.textContent = altText;
                 imageCaption.style.display = 'block';
+                console.log("Caption updated to:", altText);
             } else {
                 imageCaption.style.display = 'none';
+                console.log("Caption hidden");
             }
         }
 
         window.openModalImageViewer = function (index) {
+            console.log("openModalImageViewer called with index:", index);
             currentImageIndex = index;
             updateModalImage();
             modalImageViewer.classList.add('modal-active');
             if (chatWindowToggle) chatWindowToggle.click();
-            console.log("openModalImageViewer, index: " + index);
             updateArrowVisibility();
         }
 
         window.closeModalImageViewer = function () {
+            console.log("closeModalImageViewer called");
             modalImageViewer.classList.remove('modal-active');
             if (chatWindowToggle) chatWindowToggle.click();
         }
 
         window.showPreviousImage = function () {
+            console.log("showPreviousImage called");
             if (currentImageIndex > 0) {
                 currentImageIndex--;
+                console.log("Current image index updated to:", currentImageIndex);
                 updateModalImage();
                 updateArrowVisibility();
             }
         }
 
         window.showNextImage = function () {
+            console.log("showNextImage called");
             if (currentImageIndex < images.length - 1) {
                 currentImageIndex++;
+                console.log("Current image index updated to:", currentImageIndex);
                 updateModalImage();
                 updateArrowVisibility();
             }
@@ -332,7 +346,12 @@
             if (event.target.tagName === 'IMG' && event.target.closest('.chat-message')) {
                 images = Array.from(document.querySelectorAll('.chat-message img'));
                 const clickedImageIndex = images.indexOf(event.target);
+                console.log("Image clicked with index:", clickedImageIndex);
                 openModalImageViewer(clickedImageIndex);
+            } else if (event.target.closest('.more-images')) {
+                images = Array.from(document.querySelectorAll('.chat-message img'));
+                console.log("More images clicked, opening modal viewer at index 3");
+                openModalImageViewer(3);
             }
         });
 
@@ -351,5 +370,10 @@
 
         observer.observe(chatMessagesContainer, { childList: true, subtree: true });
     </script>
+    <style>
+        .fade-in {
+            opacity: 1 !important;
+        }
+    </style>
 </body>
 </html>
