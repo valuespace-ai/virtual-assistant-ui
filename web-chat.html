@@ -1,89 +1,226 @@
-﻿<head>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Chat</title>
+    <title>Virtual Assistant Demo</title>
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
     <style>
         :root {
             --chat--color-primary: #e74266;
-            --chat--color-primary-shade-50: #db4061;
-            --chat--color-primary-shade-100: #cf3c5c;
             --chat--color-secondary: #20b69e;
-            --chat--color-secondary-shade-50: #1ca08a;
             --chat--color-white: #ffffff;
-            --chat--color-light: #f2f4f8;
-            --chat--color-light-shade-50: #e6e9f1;
-            --chat--color-light-shade-100: #c2c5cc;
-            --chat--color-medium: #d2d4d9;
             --chat--color-dark: #101330;
-            --chat--color-disabled: #777980;
-            --chat--color-typing: #404040;
-            --chat--spacing: 1rem;
-            --chat--border-radius: 0.25rem;
-            --chat--transition-duration: 0.15s;
-            --chat--window--width: 600px;
-            --chat--window--height: 800px;
-            --chat--header-height: auto;
-            --chat--header--padding: var(--chat--spacing);
-            --chat--header--background: var(--chat--color-dark);
-            --chat--header--color: var(--chat--color-light);
-            --chat--header--border-top: none;
-            --chat--header--border-bottom: none;
-            --chat--heading--font-size: 1.5em;
-            --chat--subtitle--font-size: inherit;
-            --chat--subtitle--line-height: 1.2;
-            --chat--textarea--height: 50px;
-            --chat--message--font-size: 1rem;
-            --chat--message--padding: var(--chat--spacing);
-            --chat--message--border-radius: var(--chat--border-radius);
-            --chat--message-line-height: 1.8;
-            --chat--message--bot--background: var(--chat--color-white);
-            --chat--message--bot--color: var(--chat--color-dark);
-            --chat--message--bot--border: none;
-            --chat--message--user--background: var(--chat--color-secondary);
-            --chat--message--user--color: var(--chat--color-white);
-            --chat--message--user--border: none;
-            --chat--message--pre--background: rgba(0, 0, 0, 0.05);
-            --chat--toggle--background: var(--chat--color-primary);
-            --chat--toggle--hover--background: var(--chat--color-primary-shade-50);
-            --chat--toggle--active--background: var(--chat--color-primary-shade-100);
-            --chat--toggle--color: var(--chat--color-white);
-            --chat--toggle--size: 64px;
-            .chat-body .chat-message img
+            --chat--color-light: #f2f4f8;
+            --chat--color-medium: #d2d4d9;
+        }
 
-        {
+        .chat-body {
+            background-color: var(--chat--color-white); /* Chat body background color */
+            position: relative; /* Ensure the full-screen image is positioned relative to chat body */
+        }
+
+        .chat-header {
+            background-color: var(--chat--color-dark); /* Header background color */
+            color: var(--chat--color-light); /* Header text color */
+        }
+
+        .chat-message-from-bot {
+            background-color: var(--chat--color-white); /* Bot message background color */
+            color: var(--chat--color-dark); /* Bot message text color */
+        }
+
+        .chat-message-from-user {
+            background-color: var(--chat--color-secondary); /* User message background color */
+            color: var(--chat--color-white); /* User message text color */
+        }
+
+        .chat-toggle {
+            background-color: var(--chat--color-primary); /* Toggle button background color */
+            color: var(--chat--color-white); /* Toggle button text color */
+        }
+
+        .chat-body .chat-message img {
             width: 100%;
             height: auto; /* Maintain aspect ratio */
             border-radius: 10px; /* Slightly rounded corners */
-            border: 1px solid #ddd; /* Light gray border */
-            padding: 1px; /* Space around the image */
-            background-color: #f2f2f2; /* Light gray background for padding area */
+            border: 2px solid var(--chat--color-medium); /* Light gray border */
+            padding: 5px; /* Space around the image */
+            background-color: var(--chat--color-light); /* Light gray background for padding area */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+            cursor: pointer; /* Change cursor to pointer on hover */
+            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
         }
+
+        /* Styles for the image grid within ordered list */
+        .chat-message-markdown ol {
+            padding: 0;
+            list-style: none;
+        }
+
+            .chat-message-markdown ol li {
+                margin: 5px 0;
+            }
+
+                .chat-message-markdown ol li img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
+                }
+
+        /* Modal image viewer styles within chat body */
+        .modal-image-viewer {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+            .modal-image-viewer img {
+                max-width: 90%;
+                max-height: 90%;
+                border-radius: 10px;
+                margin: 20px 0;
+            }
+
+            .modal-image-viewer .close-button,
+            .modal-image-viewer .back-arrow,
+            .modal-image-viewer .next-arrow {
+                position: absolute;
+                top: 20px;
+                color: white;
+                font-size: 2em;
+                cursor: pointer;
+                display: none; /* Initially hide the arrows */
+            }
+
+            .modal-image-viewer .close-button {
+                right: 20px;
+                display: block; /* Always show the close button */
+            }
+
+            .modal-image-viewer .back-arrow {
+                left: 20px;
+            }
+
+            .modal-image-viewer .next-arrow {
+                right: 60px;
+            }
+
+        /* Modal image viewer active state */
+        .modal-active {
+            display: flex !important;
         }
     </style>
 </head>
 
-<script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+<body>
 
-	createChat({
-		webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
-		mode: 'window',
-        metadata: { project: 'vesperworld'},
-        showWelcomeScreen: false,
-        initialMessages: [
-		'Hi there! 👋',
-		'My name is Lujo. How can I assist you today?'
-        ],
-        i18n: {
-            en: {
-                title: 'Hi there! 👋',
-                subtitle: "Start a chat. We're here to help you 24/7.",
-                footer: 'Checking bot commpliance rules <link here...>',
-                getStarted: 'New Conversation',
-                inputPlaceholder: 'Type your question..',
+    <div class="modal-image-viewer" id="modalImageViewer">
+        <div class="back-arrow" id="backArrow" onclick="showPreviousImage()">&#8592;</div>
+        <div class="next-arrow" id="nextArrow" onclick="showNextImage()">&#8594;</div>
+        <div class="close-button" onclick="closeModalImageViewer()">&#10006;</div>
+        <img id="modalImageView" src="" alt="Image">
+    </div>
+
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+        // Create the chat widget
+        createChat({
+            webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
+            mode: 'window',
+            metadata: { project: 'vesperworld' },
+            showWelcomeScreen: false,
+            initialMessages: [
+                'Hi there! 👋',
+                'My name is Lujo. How can I assist you today?',
+                '<chatInput>',
+            ],
+            i18n: {
+                en: {
+                    title: 'Hi there! 👋',
+                    subtitle: "Start a chat. We're here to help you 24/7.",
+                    footer: 'Checking bot compliance rules <link here...>',
+                    getStarted: 'New Conversation',
+                    inputPlaceholder: 'Type your question..',
+                },
             },
-	},
-	});
-</script>
+        });
+
+        let currentImageIndex = 0;
+        let images = [];
+
+        const chatWindowToggle = document.querySelector('.chat-window-toggle');
+        const backArrow = document.getElementById('backArrow');
+        const nextArrow = document.getElementById('nextArrow');
+        const modalImageViewer = document.getElementById('modalImageViewer');
+
+        // Function to update arrow visibility
+        function updateArrowVisibility() {
+            backArrow.style.display = currentImageIndex > 0 ? 'block' : 'none';
+            nextArrow.style.display = currentImageIndex < images.length - 1 ? 'block' : 'none';
+        }
+
+        // Function to open modal image viewer
+        window.openModalImageViewer = function (index) {
+            currentImageIndex = index;
+            const modalImageView = document.getElementById('modalImageView');
+            modalImageView.src = images[currentImageIndex].src;
+            modalImageViewer.classList.add('modal-active');
+            if (chatWindowToggle) chatWindowToggle.click(); // Hide the chat
+            updateArrowVisibility();
+        }
+
+        // Function to close modal image viewer
+        window.closeModalImageViewer = function () {
+            modalImageViewer.classList.remove('modal-active');
+            if (chatWindowToggle) chatWindowToggle.click(); // Show the chat
+        }
+
+        // Function to show the previous image
+        window.showPreviousImage = function () {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                document.getElementById('modalImageView').src = images[currentImageIndex].src;
+                updateArrowVisibility();
+            }
+        }
+
+        // Function to show the next image
+        window.showNextImage = function () {
+            if (currentImageIndex < images.length - 1) {
+                currentImageIndex++;
+                document.getElementById('modalImageView').src = images[currentImageIndex].src;
+                updateArrowVisibility();
+            }
+        }
+
+        // Add click event listener to all images
+        document.addEventListener('click', function (event) {
+            if (event.target.tagName === 'IMG' && event.target.closest('.chat-message')) {
+                images = Array.from(document.querySelectorAll('.chat-message img'));
+                const clickedImageIndex = images.indexOf(event.target);
+                openModalImageViewer(clickedImageIndex);
+            }
+        });
+
+        // Add click event listener to modal image viewer to close when clicking outside the image
+        modalImageViewer.addEventListener('click', function (event) {
+            if (event.target === modalImageViewer) {
+                closeModalImageViewer();
+            }
+        });
+    </script>
+</body>
+</html>
