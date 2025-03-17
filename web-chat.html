@@ -62,14 +62,50 @@
                 margin: 5px 0;
             }
 
-                .chat-message-markdown ol li img {
-                    width: 100%;
-                    height: auto;
+        .chat-message-markdown .image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+        }
+
+            .chat-message-markdown .image-grid img {
+                width: 100%;
+                height: auto;
+                border-radius: 10px;
+                cursor: pointer;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
+            }
+
+            .chat-message-markdown .image-grid .more-images {
+                position: relative;
+                background-color: rgb(0 0 0 / 80%); /* Faded white background */
+                color: var(--chat--color-dark); /* Dark text color */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.5em; /* Smaller font size */
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                cursor: pointer; /* Make the entire element clickable */
+            }
+
+                .chat-message-markdown .image-grid .more-images img {
+                    opacity: 0.5; /* Fade the image */
                     border-radius: 10px;
-                    cursor: pointer;
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
                 }
+
+                .chat-message-markdown .image-grid .more-images::after {
+                    content: attr(data-count);
+                    position: absolute;
+                    color: white;
+                    font-size: 2em;
+                    font-weight: bold;
+                }
+
+        .chat-message-markdown .hidden-images {
+            display: none;
+        }
 
         /* Modal image viewer styles within chat body */
         .modal-image-viewer {
@@ -99,7 +135,7 @@
                 position: absolute;
                 top: 20px;
                 color: white;
-                font-size: 2em;
+                font-size: 1.2em;
                 cursor: pointer;
                 display: none; /* Initially hide the arrows */
             }
@@ -136,6 +172,46 @@
     <script type="module">
         import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
+        // Function to group images in a 2x2 table and show the remaining count
+        function groupImages() {
+            console.log("groupImages function called");
+
+            const imageContainers = document.querySelectorAll('.chat-message-markdown ol');
+            console.log("Found image containers:", imageContainers.length);
+            imageContainers.forEach(container => {
+                const imageElements = container.querySelectorAll('li img');
+                console.log("Found images:", imageElements.length);
+                if (imageElements.length >= 4) {
+                    const imageGrid = document.createElement('div');
+                    imageGrid.className = 'image-grid';
+
+                    for (let i = 0; i < 4; i++) {
+                        const imgWrapper = document.createElement('div');
+                        if (i === 3 && imageElements.length > 4) {
+                            imgWrapper.className = 'more-images';
+                            imgWrapper.setAttribute('data-count', `+${imageElements.length - 3}`);
+                            imgWrapper.onclick = () => {
+                                openModalImageViewer(3);
+                            }; // Make the entire element clickable
+                        }
+                        imgWrapper.appendChild(imageElements[i].cloneNode(true));
+                        imageGrid.appendChild(imgWrapper);
+                    }
+
+                    container.innerHTML = '';
+                    container.appendChild(imageGrid);
+
+                    // Append hidden images
+                    const hiddenImages = document.createElement('div');
+                    hiddenImages.className = 'hidden-images';
+                    for (let i = 4; i < imageElements.length; i++) {
+                        hiddenImages.appendChild(imageElements[i].cloneNode(true));
+                    }
+                    container.appendChild(hiddenImages);
+                }
+            });
+        }
+
         // Create the chat widget
         createChat({
             webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
@@ -145,7 +221,6 @@
             initialMessages: [
                 'Hi there! 👋',
                 'My name is Lujo. How can I assist you today?',
-                '<chatInput>',
             ],
             i18n: {
                 en: {
@@ -156,6 +231,8 @@
                     inputPlaceholder: 'Type your question..',
                 },
             },
+            allowFileUploads: true,
+            allowedFilesMimeTypes: '.pdf;.doc;.docs;.txt;.png;.jpg;.jpeg',
         });
 
         let currentImageIndex = 0;
@@ -221,6 +298,17 @@
                 closeModalImageViewer();
             }
         });
+
+        // MutationObserver to detect changes in the chat messages container
+        const chatMessagesContainer = document.querySelector('.chat-messages-list');
+        const observer = new MutationObserver(() => {
+            console.log("New messages detected");
+            images = Array.from(document.querySelectorAll('.chat-message img')); // Update images array
+            groupImages();
+        });
+
+        // Start observing the chat messages container for changes
+        observer.observe(chatMessagesContainer, { childList: true, subtree: true });
     </script>
 </body>
 </html>
