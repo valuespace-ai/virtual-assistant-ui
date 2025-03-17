@@ -16,43 +16,42 @@
         }
 
         .chat-body {
-            background-color: var(--chat--color-white); /* Chat body background color */
-            position: relative; /* Ensure the full-screen image is positioned relative to chat body */
+            background-color: var(--chat--color-white);
+            position: relative;
         }
 
         .chat-header {
-            background-color: var(--chat--color-dark); /* Header background color */
-            color: var(--chat--color-light); /* Header text color */
+            background-color: var(--chat--color-dark);
+            color: var(--chat--color-light);
         }
 
         .chat-message-from-bot {
-            background-color: var(--chat--color-white); /* Bot message background color */
-            color: var(--chat--color-dark); /* Bot message text color */
+            background-color: var(--chat--color-white);
+            color: var(--chat--color-dark);
         }
 
         .chat-message-from-user {
-            background-color: var(--chat--color-secondary); /* User message background color */
-            color: var(--chat--color-white); /* User message text color */
+            background-color: var(--chat--color-secondary);
+            color: var(--chat--color-white);
         }
 
         .chat-toggle {
-            background-color: var(--chat--color-primary); /* Toggle button background color */
-            color: var(--chat--color-white); /* Toggle button text color */
+            background-color: var(--chat--color-primary);
+            color: var(--chat--color-white);
         }
 
         .chat-body .chat-message img {
             width: 100%;
-            height: auto; /* Maintain aspect ratio */
-            border-radius: 10px; /* Slightly rounded corners */
-            border: 2px solid var(--chat--color-medium); /* Light gray border */
-            padding: 5px; /* Space around the image */
-            background-color: var(--chat--color-light); /* Light gray background for padding area */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-            cursor: pointer; /* Change cursor to pointer on hover */
-            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
+            height: auto;
+            border-radius: 10px;
+            border: 2px solid var(--chat--color-medium);
+            padding: 5px;
+            background-color: var(--chat--color-light);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
         }
 
-        /* Styles for the image grid within ordered list */
         .chat-message-markdown ol {
             padding: 0;
             list-style: none;
@@ -74,24 +73,24 @@
                 border-radius: 10px;
                 cursor: pointer;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease; /* Smooth transition */
+                transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
             }
 
             .chat-message-markdown .image-grid .more-images {
                 position: relative;
-                background-color: rgb(0 0 0 / 80%); /* Faded white background */
-                color: var(--chat--color-dark); /* Dark text color */
+                background-color: rgb(0 0 0 / 80%);
+                color: var(--chat--color-dark);
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 0.5em; /* Smaller font size */
+                font-size: 0.5em;
                 border-radius: 10px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                cursor: pointer; /* Make the entire element clickable */
+                cursor: pointer;
             }
 
                 .chat-message-markdown .image-grid .more-images img {
-                    opacity: 0.5; /* Fade the image */
+                    opacity: 0.5;
                     border-radius: 10px;
                 }
 
@@ -107,7 +106,16 @@
             display: none;
         }
 
-        /* Modal image viewer styles within chat body */
+        .chat-message-markdown .image-caption {
+            background-color: var(--chat--color-light);
+            color: var(--chat--color-dark);
+            border-radius: 10px;
+            padding: 5px;
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
         .modal-image-viewer {
             display: none;
             position: absolute;
@@ -115,7 +123,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.8);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -127,52 +135,68 @@
                 max-height: 90%;
                 border-radius: 10px;
                 margin: 20px 0;
+                opacity: 0;
+                transition: opacity 2s ease;
             }
 
             .modal-image-viewer .close-button,
             .modal-image-viewer .back-arrow,
             .modal-image-viewer .next-arrow {
                 position: absolute;
-                top: 20px;
                 color: white;
                 font-size: 1.2em;
                 cursor: pointer;
-                display: none; /* Initially hide the arrows */
+                display: none;
             }
 
             .modal-image-viewer .close-button {
+                top: 20px;
                 right: 20px;
-                display: block; /* Always show the close button */
+                display: block;
             }
 
             .modal-image-viewer .back-arrow {
                 left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             .modal-image-viewer .next-arrow {
-                right: 60px;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
-        /* Modal image viewer active state */
+            .modal-image-viewer .caption {
+                max-width: 90%;
+                margin: 10px 0;
+                padding: 10px;
+                color: #d3d3d3;
+                text-align: center;
+                font-size: 1em;
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
         .modal-active {
             display: flex !important;
         }
     </style>
 </head>
-
 <body>
-
     <div class="modal-image-viewer" id="modalImageViewer">
         <div class="back-arrow" id="backArrow" onclick="showPreviousImage()">&#8592;</div>
         <div class="next-arrow" id="nextArrow" onclick="showNextImage()">&#8594;</div>
         <div class="close-button" onclick="closeModalImageViewer()">&#10006;</div>
         <img id="modalImageView" src="" alt="Image">
+        <div class="caption" id="imageCaption"></div>
     </div>
 
     <script type="module">
         import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-        // Function to group images in a 2x2 table and show the remaining count
         function groupImages() {
             console.log("groupImages function called");
 
@@ -190,9 +214,6 @@
                         if (i === 3 && imageElements.length > 4) {
                             imgWrapper.className = 'more-images';
                             imgWrapper.setAttribute('data-count', `+${imageElements.length - 3}`);
-                            imgWrapper.onclick = () => {
-                                openModalImageViewer(3);
-                            }; // Make the entire element clickable
                         }
                         imgWrapper.appendChild(imageElements[i].cloneNode(true));
                         imageGrid.appendChild(imgWrapper);
@@ -201,18 +222,30 @@
                     container.innerHTML = '';
                     container.appendChild(imageGrid);
 
-                    // Append hidden images
                     const hiddenImages = document.createElement('div');
                     hiddenImages.className = 'hidden-images';
                     for (let i = 4; i < imageElements.length; i++) {
                         hiddenImages.appendChild(imageElements[i].cloneNode(true));
                     }
                     container.appendChild(hiddenImages);
+                } else {
+                    console.log("Adding captions for lonely images");
+                    imageElements.forEach(img => {
+                        if (!img.closest('.image-grid')) {
+                            const altText = img.alt;
+                            if (altText) {
+                                const caption = document.createElement('div');
+                                caption.className = 'image-caption';
+                                caption.textContent = altText;
+                                img.insertAdjacentElement('afterend', caption);
+                                console.log("Caption added:", altText);
+                            }
+                        }
+                    });
                 }
             });
         }
 
-        // Create the chat widget
         createChat({
             webhookUrl: 'https://valuespace.app.n8n.cloud/webhook/b0cd5e28-a448-47de-b150-9d244d37e270/chat',
             mode: 'window',
@@ -242,48 +275,59 @@
         const backArrow = document.getElementById('backArrow');
         const nextArrow = document.getElementById('nextArrow');
         const modalImageViewer = document.getElementById('modalImageViewer');
+        const imageCaption = document.getElementById('imageCaption');
 
-        // Function to update arrow visibility
         function updateArrowVisibility() {
             backArrow.style.display = currentImageIndex > 0 ? 'block' : 'none';
             nextArrow.style.display = currentImageIndex < images.length - 1 ? 'block' : 'none';
         }
 
-        // Function to open modal image viewer
+        function updateModalImage() {
+            const modalImageView = document.getElementById('modalImageView');
+            modalImageView.style.opacity = 0; // Start with opacity 0
+            setTimeout(() => {
+                modalImageView.src = images[currentImageIndex].src;
+                modalImageView.style.opacity = 1; // Transition to opacity 1
+            }, 50);
+            const altText = images[currentImageIndex].alt;
+            if (altText) {
+                imageCaption.textContent = altText;
+                imageCaption.style.display = 'block';
+            } else {
+                imageCaption.style.display = 'none';
+            }
+        }
+
         window.openModalImageViewer = function (index) {
             currentImageIndex = index;
-            const modalImageView = document.getElementById('modalImageView');
-            modalImageView.src = images[currentImageIndex].src;
+            updateModalImage();
             modalImageViewer.classList.add('modal-active');
-            if (chatWindowToggle) chatWindowToggle.click(); // Hide the chat
+            if (chatWindowToggle) chatWindowToggle.click();
+            console.log("openModalImageViewer, index: " + index);
             updateArrowVisibility();
         }
 
-        // Function to close modal image viewer
         window.closeModalImageViewer = function () {
             modalImageViewer.classList.remove('modal-active');
-            if (chatWindowToggle) chatWindowToggle.click(); // Show the chat
+            if (chatWindowToggle) chatWindowToggle.click();
         }
 
-        // Function to show the previous image
         window.showPreviousImage = function () {
             if (currentImageIndex > 0) {
                 currentImageIndex--;
-                document.getElementById('modalImageView').src = images[currentImageIndex].src;
+                updateModalImage();
                 updateArrowVisibility();
             }
         }
 
-        // Function to show the next image
         window.showNextImage = function () {
             if (currentImageIndex < images.length - 1) {
                 currentImageIndex++;
-                document.getElementById('modalImageView').src = images[currentImageIndex].src;
+                updateModalImage();
                 updateArrowVisibility();
             }
         }
 
-        // Add click event listener to all images
         document.addEventListener('click', function (event) {
             if (event.target.tagName === 'IMG' && event.target.closest('.chat-message')) {
                 images = Array.from(document.querySelectorAll('.chat-message img'));
@@ -292,22 +336,19 @@
             }
         });
 
-        // Add click event listener to modal image viewer to close when clicking outside the image
         modalImageViewer.addEventListener('click', function (event) {
             if (event.target === modalImageViewer) {
                 closeModalImageViewer();
             }
         });
 
-        // MutationObserver to detect changes in the chat messages container
         const chatMessagesContainer = document.querySelector('.chat-messages-list');
         const observer = new MutationObserver(() => {
             console.log("New messages detected");
-            images = Array.from(document.querySelectorAll('.chat-message img')); // Update images array
+            images = Array.from(document.querySelectorAll('.chat-message img'));
             groupImages();
         });
 
-        // Start observing the chat messages container for changes
         observer.observe(chatMessagesContainer, { childList: true, subtree: true });
     </script>
 </body>
