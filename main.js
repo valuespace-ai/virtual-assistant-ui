@@ -1,74 +1,4 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-												  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Assistant Demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
-    <link rel="stylesheet" href="./effect-expo.min.css">
-	<link rel="stylesheet" href="./main.css">
-</head>
-<body>
-<div class="modal-image-viewer" id="modalImageViewer">
-					 
-        <div class="demo-nav">
-            <div class="demo-nav-segmented">
-                <button data-direction="horizontal" class="active">Horizontal</button>
-                <button data-direction="vertical">Vertical</button>
-            </div>
-            <button class="demo-nav-rotate active">
-                <span>Rotate</span>
-            </button>
-            <button class="demo-nav-theme">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
-			   
-                    <path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z" />
-                </svg>
-            </button>
-            <button class="demo-nav-content">
-                <svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
-                    <path d="M120-240v-80h480v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-                </svg>
-            </button>
-			<button class="toggle-nav-buttons active"><></button>
-        </div>
-		
-		<!-- Expo Slider -->
-    <div class="swiper">
-      <div class="swiper-wrapper" id="swiperWrapper">
-		<!-- Expo content -->
-		<div class="swiper-slide">
-          <!-- Expo container -->
-          <div class="expo-container">
-            <!-- Expo image -->
-            <img class="expo-image" src="01.jpg" />
-            <!-- Expo content, optional -->
-            <div class="expo-content">
-              Confidence is the best outfit. Wear it and own it!
-            </div>
-          </div>
-        </div>
-        <div class="swiper-slide">
-          <div class="expo-container">
-            <img class="expo-image" src="02.jpg" />
-            <div class="expo-content">
-              Glow differently. Shine unapologetically.
-            </div>
-          </div>
-        </div>
-	  </div>
-        <!-- Add Custom Arrows -->
-		<div class="swiper-button-next"></div>
-		<div class="swiper-button-prev"></div>
-    </div>
-</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="./effect-expo.min.js"></script>
-    <script type="module">
-        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
         function groupImages() {
             const imageContainers = document.querySelectorAll('.chat-message-markdown ol');
@@ -168,6 +98,7 @@
 			if (swiper) {
 			   console.log("swiper.update();");
 			   swiper.update();
+			   //swiper.changeDirection();
 			   swiper.slideTo(currentImageIndex, 0, false);
 			}
 			
@@ -180,9 +111,6 @@
 					button.style.display = 'flex';
 				});
 			});
-			
-			buttonSwitchArrows.classList.remove('remove');
-			buttonSwitchArrows.classList.add('active');
 			
             if (chatWindowToggle) chatWindowToggle.click();
         }
@@ -216,7 +144,7 @@
         const observer = new MutationObserver(() => {
             images = Array.from(document.querySelectorAll('.chat-message img'));
             groupImages();
-        });
+			});
 
         observer.observe(chatMessagesContainer, { childList: true, subtree: true });
 
@@ -333,72 +261,6 @@
 		}
 		mediaQuery.addListener(handleMediaChange);
 		handleMediaChange(mediaQuery);
-
-		
+	   
    };	
    
-    </script>
-<script>
-    // Function to check if cookies can be written
-    function canWriteCookies() {
-        // Try to set a test cookie
-        document.cookie = "test_cookie=1; path=/";
-
-        // Check if the test cookie can be read back
-        const canWrite = document.cookie.indexOf("test_cookie=") !== -1;
-
-        // Clean up the test cookie
-        document.cookie = "test_cookie=1; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
-        return canWrite;
-    }
-
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-        if (canWriteCookies()) {
-            const expires = new Date(Date.now() + days * 864e5).toUTCString();
-            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-        } else {
-            console.warn("Cannot write cookies");
-        }
-    }
-
-    // Function to get a cookie
-    function getCookie(name) {
-        return document.cookie.split('; ').reduce((r, v) => {
-            const parts = v.split('=');
-            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-        }, '');
-    }
-
-    // Function to handle button click and toggle active class
-    function handleNavButtonClick(button) {
-        const isActive = button.classList.toggle('active');
-        setCookie(button.dataset.button, isActive, 7); // Store the state in a cookie for 7 days
-    }
-
-    // Function to restore button state from cookies
-    function restoreNavButtonState() {
-        const buttons = document.querySelectorAll('.demo-nav button');
-        buttons.forEach(button => {
-            const isActive = getCookie(button.dataset.button) === 'true';
-            if (isActive) {
-                button.classList.add('active');
-            } else {
-                button.classList.remove('active');
-            }
-        });
-    }
-
-    // Add event listeners to navigation buttons and restore button state on page load
-    //document.addEventListener('DOMContentLoaded', () => {
-    //    document.querySelectorAll('.demo-nav button').forEach(button => {
-            button.addEventListener('click', () => handleNavButtonClick(button));
-    //    });
-
-        // Restore button state on page load
-        //restoreNavButtonState();
-    //});
-</script>
-</body>
-</html>
