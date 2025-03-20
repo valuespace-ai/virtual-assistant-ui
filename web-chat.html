@@ -11,7 +11,9 @@
 	<link rel="stylesheet" href="./main.css">
 </head>
 <body>
-<div class="modal-image-viewer" id="modalImageViewer">
+
+<div id="app1">
+	<div class="modal-image-viewer" id="modalImageViewer">
 					 
         <div class="demo-nav">
             <div class="demo-nav-segmented">
@@ -63,6 +65,7 @@
 		<div class="swiper-button-next"></div>
 		<div class="swiper-button-prev"></div>
     </div>
+  </div>
 </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -174,15 +177,11 @@
             document.getElementById('modalImageViewer').classList.add('modal-active');
             const chatWindowToggle = document.querySelector('.chat-window-toggle');
 			
-			document.querySelector('.toggle-nav-buttons').addEventListener('click', () => {
-			const navButtons = document.querySelectorAll('.swiper-button-next, .swiper-button-prev');
-				navButtons.forEach(button => {
-					button.style.display = 'flex';
-				});
-			});
-			
-			buttonSwitchArrows.classList.remove('remove');
-			buttonSwitchArrows.classList.add('active');
+			const buttonSwitchArrows = document.querySelector('.toggle-nav-buttons');
+			if (!buttonSwitchArrows.classList.contains('active'))
+			{
+				buttonSwitchArrows.click();
+			}
 			
             if (chatWindowToggle) chatWindowToggle.click();
         }
@@ -191,12 +190,12 @@
             document.getElementById('modalImageViewer').classList.remove('modal-active');
             const chatWindowToggle = document.querySelector('.chat-window-toggle');
 			
-			document.querySelector('.toggle-nav-buttons').addEventListener('click', () => {
-			const navButtons = document.querySelectorAll('.swiper-button-next, .swiper-button-prev');
-				navButtons.forEach(button => {
-					button.style.display = 'none';
-				});
-			});
+			const buttonSwitchArrows = document.querySelector('.toggle-nav-buttons');
+			if (buttonSwitchArrows.classList.contains('active'))
+			{
+				buttonSwitchArrows.click();
+			}
+			
 		
             if (chatWindowToggle) chatWindowToggle.click();
         }
