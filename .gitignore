@@ -58,8 +58,8 @@ coverage/
 *.lcov
 
 # Ignore minified files (if you want to keep only source files in the repo)
-*.min.js
-*.min.css
+#*.min.js
+#*.min.css
 
 # Ignore specific file types (if not needed in the repo)
 *.zip
