@@ -12,9 +12,7 @@
 </head>
 <body>
 
-<div id="app1">
 	<div class="modal-image-viewer" id="modalImageViewer">
-					 
         <div class="demo-nav">
             <div class="demo-nav-segmented">
                 <button data-direction="horizontal" class="active">Horizontal</button>
@@ -60,13 +58,55 @@
             </div>
           </div>
         </div>
+        <div class="swiper-slide">
+          <div class="expo-container">
+            <img class="expo-image" src="03.jpg" />
+            <div class="expo-content">
+              Elegance is an attitude.
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="expo-container">
+            <img class="expo-image" src="04.jpg" />
+            <div class="expo-content">
+              Fearless. Limitless. Unstoppable.
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="expo-container">
+            <img class="expo-image" src="05.jpg" />
+            <div class="expo-content">
+              Your vibe attracts your tribe.
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="expo-container">
+            <img class="expo-image" src="06.jpg" />
+            <div class="expo-content">
+              Style is a way to say who you are without speaking.
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="expo-container">
+            <img class="expo-image" src="07.jpg" />
+            <div class="expo-content">
+              Be bold, be brilliant, be you.
+            </div>
+          </div>
+        </div>
+      </div>
 	  </div>
         <!-- Add Custom Arrows -->
 		<div class="swiper-button-next"></div>
 		<div class="swiper-button-prev"></div>
+		<button class="diapo-close-button" onclick="closeModalImageViewer()">×</button>
     </div>
   </div>
-</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="./effect-expo.min.js"></script>
@@ -167,9 +207,8 @@
                 swiperWrapper.appendChild(slide);
             });
 			
-			console.log("swiper:" + swiper);
+			
 			if (swiper) {
-			   console.log("swiper.update();");
 			   swiper.update();
 			   swiper.slideTo(currentImageIndex, 0, false);
 			}
@@ -183,11 +222,14 @@
 				buttonSwitchArrows.click();
 			}
 			
+			const modalImageViewer = document.getElementById('modalImageViewer');
+			modalImageViewer.classList.add('modal-active');
+            modalImageViewer.style.display = 'block';
+			
             if (chatWindowToggle) chatWindowToggle.click();
         }
 
         window.closeModalImageViewer = function () {
-            document.getElementById('modalImageViewer').classList.remove('modal-active');
             const chatWindowToggle = document.querySelector('.chat-window-toggle');
 			
 			const buttonSwitchArrows = document.querySelector('.toggle-nav-buttons');
@@ -196,7 +238,10 @@
 				buttonSwitchArrows.click();
 			}
 			
-		
+			const modalImageViewer = document.getElementById('modalImageViewer');
+			modalImageViewer.classList.remove('modal-active');
+            modalImageViewer.style.display = 'none';
+			
             if (chatWindowToggle) chatWindowToggle.click();
         }
 
@@ -221,7 +266,6 @@
 
    // Initialize Swiper only if it's not already initialized
    if (!swiper) {
-			console.log("init swiper");
 		swiper = new Swiper('.swiper', {
 				  direction: 'horizontal',
 				  // pass EffectExpo module to modules
@@ -337,67 +381,5 @@
    };	
    
     </script>
-<script>
-    // Function to check if cookies can be written
-    function canWriteCookies() {
-        // Try to set a test cookie
-        document.cookie = "test_cookie=1; path=/";
-
-        // Check if the test cookie can be read back
-        const canWrite = document.cookie.indexOf("test_cookie=") !== -1;
-
-        // Clean up the test cookie
-        document.cookie = "test_cookie=1; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-
-        return canWrite;
-    }
-
-    // Function to set a cookie
-    function setCookie(name, value, days) {
-        if (canWriteCookies()) {
-            const expires = new Date(Date.now() + days * 864e5).toUTCString();
-            document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-        } else {
-            console.warn("Cannot write cookies");
-        }
-    }
-
-    // Function to get a cookie
-    function getCookie(name) {
-        return document.cookie.split('; ').reduce((r, v) => {
-            const parts = v.split('=');
-            return parts[0] === name ? decodeURIComponent(parts[1]) : r;
-        }, '');
-    }
-
-    // Function to handle button click and toggle active class
-    function handleNavButtonClick(button) {
-        const isActive = button.classList.toggle('active');
-        setCookie(button.dataset.button, isActive, 7); // Store the state in a cookie for 7 days
-    }
-
-    // Function to restore button state from cookies
-    function restoreNavButtonState() {
-        const buttons = document.querySelectorAll('.demo-nav button');
-        buttons.forEach(button => {
-            const isActive = getCookie(button.dataset.button) === 'true';
-            if (isActive) {
-                button.classList.add('active');
-            } else {
-                button.classList.remove('active');
-            }
-        });
-    }
-
-    // Add event listeners to navigation buttons and restore button state on page load
-    //document.addEventListener('DOMContentLoaded', () => {
-    //    document.querySelectorAll('.demo-nav button').forEach(button => {
-            button.addEventListener('click', () => handleNavButtonClick(button));
-    //    });
-
-        // Restore button state on page load
-        //restoreNavButtonState();
-    //});
-</script>
 </body>
 </html>
