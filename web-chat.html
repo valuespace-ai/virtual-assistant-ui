@@ -188,6 +188,10 @@
 			currentImageIndex = index;
             const swiperWrapper = document.getElementById('swiperWrapper');
             swiperWrapper.innerHTML = ''; // Clear existing slides
+				
+			const modalImageViewer = document.getElementById('modalImageViewer');
+            modalImageViewer.style.display = 'flex';
+			
             images.forEach((img, i) => {
                 const slide = document.createElement('div');
                 slide.className = 'swiper-slide';
@@ -209,11 +213,11 @@
 			
 			
 			if (swiper) {
+			console.log("swipper update: " + currentImageIndex);
 			   swiper.update();
 			   swiper.slideTo(currentImageIndex, 0, false);
 			}
 			
-            document.getElementById('modalImageViewer').classList.add('modal-active');
             const chatWindowToggle = document.querySelector('.chat-window-toggle');
 			
 			const buttonSwitchArrows = document.querySelector('.toggle-nav-buttons');
@@ -221,10 +225,6 @@
 			{
 				buttonSwitchArrows.click();
 			}
-			
-			const modalImageViewer = document.getElementById('modalImageViewer');
-			modalImageViewer.classList.add('modal-active');
-            modalImageViewer.style.display = 'block';
 			
             if (chatWindowToggle) chatWindowToggle.click();
         }
@@ -238,9 +238,11 @@
 				buttonSwitchArrows.click();
 			}
 			
+			const swiperWrapper = document.getElementById('swiperWrapper');
+            swiperWrapper.innerHTML = ''; // Clear existing slides
+			
 			const modalImageViewer = document.getElementById('modalImageViewer');
-			modalImageViewer.classList.remove('modal-active');
-            modalImageViewer.style.display = 'none';
+			modalImageViewer.style.display = 'none';
 			
             if (chatWindowToggle) chatWindowToggle.click();
         }
@@ -300,24 +302,18 @@
 				  },
 				});
 				
-		
 		// Demo Buttons
 		const buttonVertical = document.querySelector('.demo-nav button[data-direction="vertical"]')
 		const buttonHorizontal = document.querySelector('.demo-nav button[data-direction="horizontal"]')
 		buttonHorizontal.addEventListener('click', () => {
-		  if (swiper.params.direction === 'horizontal') return;
-		  buttonVertical.classList.remove('active')
-		  buttonHorizontal.classList.add('active')
-		  swiper.changeDirection();
-		  swiper.originalParams.direction = 'horizontal'
+		  SwitchToHorizontalView();
 		})
 		buttonVertical.addEventListener('click', () => {
-		  if (swiper.params.direction === 'vertical') return;
-		  buttonVertical.classList.add('active')
-		  buttonHorizontal.classList.remove('active')
-		  swiper.changeDirection();
-		  swiper.originalParams.direction = 'vertical'
+		  SwitchToVerticalView();
 		})
+		
+		SwitchToHorizontalView();
+		
 		document.querySelector('.demo-nav-rotate').addEventListener('click', (e) => {
 		  const buttonEl = e.target.closest('button')
 		  if (buttonEl.classList.contains('active')) {
@@ -364,6 +360,7 @@
 				navButtons.forEach(button => {
 					button.style.display = 'none';
 				});
+				SwitchToVerticalView();				
 			} else {
 				navButtons.forEach(button => {
 					button.style.display = 'flex';
@@ -371,14 +368,42 @@
 					{
 						button.style.display = 'flex';
 					}
-				})
+				});
+				SwitchToHorizontalView();
 			}
 		}
 		mediaQuery.addListener(handleMediaChange);
 		handleMediaChange(mediaQuery);
-
 		
+		function SwitchToVerticalView()
+		{
+			console.log("switching to vertical view");
+			buttonVertical.classList.add('active');
+			buttonHorizontal.classList.remove('active');
+			
+			if (swiper.params.direction === 'horizontal')
+			{
+				swiper.originalParams.direction = 'vertical';
+				swiper.changeDirection();
+				swiper.update();
+			}
+		}
+		
+		function SwitchToHorizontalView()
+		{
+			console.log("switching to horizontal view");
+			buttonVertical.classList.remove('active')
+			buttonHorizontal.classList.add('active')
+			
+			if (swiper.params.direction === 'vertical')
+			{
+				swiper.originalParams.direction = 'horizontal'
+				swiper.changeDirection();
+				swiper.update();  
+			}
+		}
    };	
+   
    
     </script>
 </body>
